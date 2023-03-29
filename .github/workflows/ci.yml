@@ -41,14 +41,19 @@ jobs:
         toolchain: ${{ matrix.rust }}
         target: ${{ matrix.target }}
         override: true
+        
+    - name: Install cross
+      uses: taiki-e/install-action@v2
+      with:
+        tool: cross
     - name: Build
       run: |
-        cargo build --release
+        cross build --release --target x86_64-unknown-linux-musl
         tree
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: skim-${{ env.FEND_VERSION }}-linux-x64
+        name: skim-linux-x64
         path: target/x86_64-unknown-linux-musl/release/sk
         if-no-files-found: error
